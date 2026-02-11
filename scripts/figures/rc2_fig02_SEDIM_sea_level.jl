@@ -39,18 +39,19 @@ xticks_time = (xticks_time_long, convert_strings_to_latex(-1 .* xticks_time_long
 
 # Plotting
 fontsize=28
-fig = Figure(resolution=(1500, 1200), fonts=(; regular="TeX"), fontsize=fontsize)
+set_theme!(theme_latexfonts())
+fig = Figure(resolution=(1500, 1000), fontsize=fontsize)
 linewidth = 2.3
 
 # Panel a. moving weatherings, H
-ax = Axis(fig[1, 1], ylabel=icethick_label, xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
-ax.yticks = (yticks_ice, convert_strings_to_latex(yticks_ice))
+ax = Axis(fig[1, 1], ylabel=L"$V_\mathrm{ice}$ (m SLE)", xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
+# ax.yticks = (yticks_ice, convert_strings_to_latex(yticks_ice))
 ax.xticks = xticks_time
-ylims!(ax, (-100, 2800))
+# ylims!(ax, (-100, 2800))
 xlims!(ax, xlims_time_long)
 hidexdecorations!(ax)
 hidespines!(ax, :b)
-text!(ax, -2980, 2400, text=L"(a)$\,$", align=(:left, :center))
+text!(ax, -2980, -50, text=L"(a)$\,$", align=(:left, :center))
 vlines!(ax, vlines_mpt, color=color_MPT, linestyle=:solid, linewidth=3)
 vlines!(ax, mpt_occurs_at, color=:black, linestyle=:dash)
 non_phys_meaning_starts_at = 1
@@ -61,7 +62,7 @@ for (k, i) in enumerate(runs2plot_weatherings)
         mpt_occurs_at = findfirst(df["Hsed"] .<= sed_thr)
 
         if ~isnothing(mpt_occurs_at)
-            lines!(ax, df["time"] ./ 1e3, df["H"], color=colors1[k], linewidth=2)
+            lines!(ax, df["time"] ./ 1e3, df["Vol"], color=colors1[k], linewidth=2)
         end
     else
         display("NPhysmeaning weatherings, $(string(i, pad=ndigits(length(weatherings))))")
@@ -72,7 +73,7 @@ end
 
 df = NCDataset("data/runs/exp02/SEDIM/rem$(string(quarryings_idx, pad=ndigits(length(quarryings))))-gen$(string(weatherings_idx, pad=ndigits(length(weatherings)))).nc")
 lines!(ax, df["time"] ./ 1e3, df["H"] * NaN, color=:black, linewidth=0, label=L"$f_v$ = 1.4⋅10$^{-7}$")
-axislegend(ax, framevisible=false, position=:rt, labelsize=fontsize, nbanks=3)
+axislegend(ax, framevisible=false, position=:rb, labelsize=fontsize, nbanks=3)
 
 # Panel b. moving weatherings, Hsed
 ax = Axis(fig[2, 1], ylabel=sed_label, xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
@@ -101,21 +102,21 @@ Colorbar(fig[1:2, 2], height=Relative(2/3), width=Relative(0.25), colormap=color
      vertical=true, halign=0
 )   # HARDCODED according to the results (NON AUTOMATIC!)
 
-# Panel c. moving quarryings, H
-ax = Axis(fig[3, 1], ylabel=icethick_label, xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
-ax.yticks = (yticks_ice, convert_strings_to_latex(yticks_ice))
+# Panel c. moving quarryings, SLR
+ax = Axis(fig[3, 1], ylabel=L"$V_\mathrm{ice}$ (m SLE)", xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
+# ax.yticks = (yticks_ice, convert_strings_to_latex(yticks_ice))
 ax.xticks = xticks_time
-ylims!(ax, (-100, 2800))
+# ylims!(ax, (-100, 2800))
 xlims!(ax, xlims_time_long)
 hidexdecorations!(ax)
 hidespines!(ax, :b)
-text!(ax, -2980, 2400, text=L"(c)$\,$", align=(:left, :center))
+text!(ax, -2980, -50, text=L"(c)$\,$", align=(:left, :center))
 vlines!(ax, vlines_mpt, color=color_MPT, linestyle=:solid, linewidth=3)
 vlines!(ax, mpt_occurs_at, color=:black, linestyle=:dash)
 for (k, i) in enumerate(runs2plot_quarryings)
     df = NCDataset("data/runs/exp02/SEDIM/rem$(string(i, pad=ndigits(length(quarryings))))-gen$(string(weatherings_idx, pad=ndigits(length(weatherings)))).nc")
     if df["Hsed"][end] < df["Hsed"][1]
-        lines!(ax, df["time"] ./ 1e3, df["H"], color=colors2[k], linewidth=2)
+        lines!(ax, df["time"] ./ 1e3, df["Vol"], color=colors2[k], linewidth=2)
     else
         display("NPhysmeaning quarryings, $(string(i, pad=ndigits(length(quarryings))))")
     end
@@ -124,7 +125,7 @@ end
 
 df = NCDataset("data/runs/exp02/SEDIM/rem$(string(quarryings_idx, pad=ndigits(length(quarryings))))-gen$(string(weatherings_idx, pad=ndigits(length(weatherings)))).nc")
 lines!(ax, df["time"] ./ 1e3, df["H"] .* NaN, color=:black, linewidth=0, label=L"$f_{\dot{p}}$ = 5⋅10$^{-6}$")
-axislegend(ax, framevisible=false, position=:rt, labelsize=fontsize, nbanks=3)
+axislegend(ax, framevisible=false, position=:rb, labelsize=fontsize, nbanks=3)
 
 # Panel d. moving quarryings, Hsed
 ax = Axis(fig[4, 1], ylabel=sed_label, xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
@@ -162,5 +163,5 @@ colsize!(fig.layout, 2, Relative(0.05))
 rowgap!(fig.layout, 0.0)
 rowgap!(fig.layout, 2, 10.0)
 
-save("figures/fig09_rem-gen_time-series.png", fig)
-save("figures/fig09.pdf", fig)
+save("figures/rc2_fig02_SEDIM_sea_level.png", fig)
+save("figures/rc2_fig02_SEDIM_sea_level.pdf", fig)

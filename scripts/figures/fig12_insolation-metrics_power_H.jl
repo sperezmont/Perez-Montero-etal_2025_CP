@@ -66,8 +66,8 @@ params_isi300 = JLD2.load_object("data/runs/exp04/INSOL/INSOL-ISI300_params.jld2
 df_isi400 = NCDataset("data/runs/exp04/INSOL/INSOL-ISI400.nc")
 params_isi400 = JLD2.load_object("data/runs/exp04/INSOL/INSOL-ISI400_params.jld2")
 
-df_isi0 = NCDataset("data/runs/exp04/INSOL/INSOL-ISI0.nc")
-params_isi0 = JLD2.load_object("data/runs/exp04/INSOL/INSOL-ISI0_params.jld2")
+# df_isi0 = NCDataset("data/runs/exp04/INSOL/INSOL-ISI0.nc")
+# params_isi0 = JLD2.load_object("data/runs/exp04/INSOL/INSOL-ISI0_params.jld2")
 
 xticks_time = (xticks_time_long, convert_strings_to_latex(-1 .* xticks_time_long))
 sed_thr=6
@@ -76,9 +76,9 @@ sed_thr=6
 set_theme!(theme_latexfonts())
 fontsize=28
 xticks_time = (xticks_time_long, convert_strings_to_latex(-1 .* xticks_time_long))
-fig = Figure(resolution=(750, 1000), fontsize=fontsize)
+fig = Figure(resolution=(650, 1000), fontsize=fontsize)
 linewidth = 2
-colors = [pacco_color, :violetred4, :blueviolet, :yellowgreen, :cadetblue, :orangered]
+colors = [pacco_color, :violetred4, :blueviolet, :yellowgreen, :cornflowerblue, :orangered]
 
 # Absolute values, panels a, b, c
 # Panel a.
@@ -92,13 +92,13 @@ text!(ax, 10.5, 0.37, text="(a) Forcing", align=(:left, :center))
 # text!(ax, 100, 0.47, text=L"Forcing$\,$", align=(:left, :center))
 
 # Panel b.
-ax2 = Axis(fig[2, 1], ylabel="NSP", xlabel=periods_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left, xscale=Makie.pseudolog10)
+ax2 = Axis(fig[2, 1], ylabel="Normalized spectral power", ylabelpadding=25, xlabel=periods_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left, xscale=Makie.pseudolog10)
 ax2.xticks = (ticks_periods, convert_strings_to_latex(ticks_periods))
 ax2.yticks = ([0, 0.2, 0.4], convert_strings_to_latex([0, 0.2, 0.4]))
 ylims!(ax2, (-0.01, 0.55))
 xlims!(ax2, ylims_periods)
 hidexdecorations!(ax2)
-text!(ax2, 10.5, 0.4, text="(b) pre-MPT", align=(:left, :center))
+text!(ax2, 10.5, 0.4, text="(b) pre-MPT ice thickness", align=(:left, :center))
 # text!(ax2, 100, 0.47, text=L"Pre-MPT$\,$", align=(:left, :center))
 
 # Panel c.
@@ -107,16 +107,16 @@ ax3.xticks = (ticks_periods, convert_strings_to_latex(ticks_periods))
 ax3.yticks = ([0, 0.1], convert_strings_to_latex([0, 0.1]))
 ylims!(ax3, (-0.01, 0.2))
 xlims!(ax3, ylims_periods)
-text!(ax3, 10.5, 0.15, text="(c) post-MPT", align=(:left, :center))
+text!(ax3, 10.5, 0.15, text="(c) post-MPT ice thickness", align=(:left, :center))
 # text!(ax3, 100, 0.23, text=L"Post-MPT$\,$", align=(:left, :center))
 
 add_spectra!(ax, ax2, ax3, df_base, colors[1], 5, plabel=L"SSI$\,$")
-add_spectra!(ax, ax2, ax3, df_isi0, colors[3], 3, plabel=L"ISI0$\,$")
+# add_spectra!(ax, ax2, ax3, df_isi0, colors[3], 3, plabel=L"ISI0$\,$")
 add_spectra!(ax, ax2, ax3, df_isi275, colors[4], 2.8, plabel=L"ISI275$\,$")
 add_spectra!(ax, ax2, ax3, df_isi300, colors[6], 2.5, plabel=L"ISI300$\,$")
 add_spectra!(ax, ax2, ax3, df_csi, colors[2], 2.3, plabel=L"CSI$\,$")
 add_spectra!(ax, ax2, ax3, df_isi400, colors[5], 2.0, plabel=L"ISI400$\,$")
-axislegend(ax, framevisible=false, position=:rt, labelsize=fontsize, nbanks=2)
+fig[0, 1] = Legend(fig, ax, framevisible=false, position=:cc, labelsize=fontsize, nbanks=5)
 
 # # Relative values, panels b, d, f
 # # Panel b.
@@ -153,6 +153,6 @@ axislegend(ax, framevisible=false, position=:rt, labelsize=fontsize, nbanks=2)
 # add_relative_spectra!(ax, ax2, ax3, df_isi400, df_base, colors[5], 2.0)
 
 # rowgap!(fig.layout, 0.0)
-
+rowsize!(fig.layout, 0, Relative(0.05))
 save("figures/fig12_insolation_metrics_power_H.png", fig)
 save("figures/fig12.pdf", fig)

@@ -62,7 +62,7 @@ lines!(ax, df_CC2["time"][mpt_CC2:end] ./ 1e3, df_CC2["C"][mpt_CC2:end], color=:
 lines!(ax, df_CC1["time"][1:mpt_CC1] ./ 1e3, df_CC1["C"][1:mpt_CC1], color=:slateblue4, linewidth=4, label=L"100 ppm$\,$")
 lines!(ax, df_CC1["time"][mpt_CC1:end] ./ 1e3, df_CC1["C"][mpt_CC1:end], color=:plum, linewidth=4)
 
-axislegend(ax, framevisible=false, position=(0.1, -1), labelsize=fontsize, nbanks=3)
+fig[0, 1:2] = Legend(fig, ax, framevisible=false, position=(:center, :center), labelsize=fontsize, nbanks=6, patchsize=(20, 200))
 
 # Panel b. H 380
 ax = Axis(fig[2, 1], ylabel=icethick_label, xlabel=time_label, xgridvisible=false, ygridvisible=false, yaxisposition=:left)
@@ -194,6 +194,7 @@ scatter!(ax, median(anomT_CC1[mpt_CC1+1:end]), 0.9, color=:plum, strokecolor=:bl
 
 #vlines!(ax, temp_thr, color=:red, linestyle=:dash, linewidth=2)
 
+rowsize!(fig.layout, 0, Relative(0.05))
 colsize!(fig.layout, 2, Relative(1/4))
 rowgap!(fig.layout, 0.0)
 
