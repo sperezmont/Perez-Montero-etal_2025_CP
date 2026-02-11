@@ -2,7 +2,7 @@ using Pkg
 Pkg.activate(".")
 
 locpacco = "/home/sergio/entra/models/pacco_vers/pacco_v0.6/"
-locdir = "/home/sergio/entra/proyects/d05_paper-PACCO/Perez-Montero-etal_YYYY_CP/"
+locdir = "/home/sergio/entra/proyects/d06_Perez-Montero-etal_2025_CP/"
 
 locexps = "$(locpacco)/output/Perez-Montero-etal_2025_CP/"
 
@@ -50,10 +50,16 @@ end
 transfer_runs_from_pacco!("$(locexps)/exp01/", ["BASE"], "$(locdir)/data/runs/exp01/")
 
 # exp02, SEDIM 
-transfer_runs_from_pacco!("$(locexps)/exp02/", ["SEDIM"], "$(locdir)/data/runs/exp02/")
+# transfer_runs_from_pacco!("$(locexps)/exp02/", ["SEDIM"], "$(locdir)/data/runs/exp02/")
 
 # exp03, CC 
 transfer_runs_from_pacco!("$(locexps)/exp03/", ["CC"], "$(locdir)/data/runs/exp03/")
 
 # exp04, INSOL 
 transfer_runs_from_pacco!("$(locexps)/exp04/", ["INSOL"], "$(locdir)/data/runs/exp04/")
+
+# exp05, NOSEDIM, TC, TS 
+transfer_runs_from_pacco!("$(locexps)/exp05/", ["NOSEDIM", "TC", "TS"], "$(locdir)/data/runs/exp05/")
+
+# appendix, BASE-CSI
+transfer_runs_from_pacco!("$(locexps)/appendix/", ["BASE-CSI"], "$(locdir)/data/runs/appendix/")
